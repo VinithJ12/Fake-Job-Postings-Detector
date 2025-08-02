@@ -36,10 +36,16 @@ print(df_cleaned)
 # First let's see if there's a connection between the missing values and the target variable- if the missing values are random or not ( MNAR)
 cols_with_missing = df_cleaned.columns[df_cleaned.isnull().any()].tolist()
 for col in cols_with_missing:
-    for col in cols_with_missing:
-        df_cleaned[f"{col}_missing"] = df[col].isna().astype(int)
+        df_cleaned[f"{col}_missing"] = df_cleaned[col].isna().astype(int)
 
-missing_flags = [col for col in df.columns if col.endswith("_missing")]
-df.groupby("fraudulent")[missing_flags].mean().T.sort_values(by=1, ascending=False)
+missing_flags= [col for col in df_cleaned.columns if col.endswith('_missing')]
+df_cleaned.groupby('fraudulent')[missing_flags].mean().plot(kind='bar', figsize=(10, 5)) # This code will plot/ organize the missing values rate grouped by the fraudulent status
+plt.xlabel("Fraudulent Status")
+plt.ylabel("Missing Values Rate")
+plt.xticks(rotation=0)
+plt.legend(title="Columns with Missing Values")
+plt.title("Missing Values by Fraudulent Status")
+plt.show()
+
 
 # Need to remember that the target variable is 'fraudulent' and it is a binary classification problem
