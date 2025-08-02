@@ -30,4 +30,16 @@ print("Number of duplicate rows:", duplicates)
 # We will drop duplicates based on all columns except the 'job_id' column
 df_cleaned = df.drop_duplicates(subset=df.columns.difference(['job_id']))
 print(df_cleaned)
+
+#Let's impute missing values
+
+# First let's see if there's a connection between the missing values and the target variable- if the missing values are random or not ( MNAR)
+cols_with_missing = df_cleaned.columns[df_cleaned.isnull().any()].tolist()
+for col in cols_with_missing:
+    for col in cols_with_missing:
+        df_cleaned[f"{col}_missing"] = df[col].isna().astype(int)
+
+missing_flags = [col for col in df.columns if col.endswith("_missing")]
+df.groupby("fraudulent")[missing_flags].mean().T.sort_values(by=1, ascending=False)
+
 # Need to remember that the target variable is 'fraudulent' and it is a binary classification problem
